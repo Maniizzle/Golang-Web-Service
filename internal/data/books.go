@@ -14,7 +14,7 @@ type Book struct {
 	CreatedAt time.Time `json:"-"`
 	Title     string    `json:"title"`
 	// omitempty makes it optional
-	Published int      `json:"pubished,omitempty"`
+	Published int      `json:"published,omitempty"`
 	Pages     int      `json:"pages,omitempty"`
 	Genres    []string `json:"genres,omitempty"`
 	Rating    float32  `json:"rating,omitempty"`

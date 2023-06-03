@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 )
 
 type Book struct {
 	ID        int64    `json:"id"`
 	Title     string   `json:"title"`
-	Published int      `json:"pubished"`
-	Pages     int      `json:"pages,omitempty"`
-	Genres    []string `json:"genres,omitempty"`
-	Rating    float32  `json:"rating,omitempty"`
-	Version   int32    `json:"-"`
+	Published int      `json:"published"`
+	Pages     int      `json:"pages"`
+	Genres    []string `json:"genres"`
+	Rating    float32  `json:"rating"`
 }
 
 type BookResponse struct {
@@ -22,7 +22,7 @@ type BookResponse struct {
 }
 
 type BooksResponse struct {
-	Book *[]Book `json:"books"`
+	Books *[]Book `json:"books"`
 }
 
 type ReadingListModel struct {
@@ -48,5 +48,36 @@ func (m *ReadingListModel) GetAll() (*[]Book, error) {
 
 	var booksResp BooksResponse
 	err = json.Unmarshal(data, &booksResp)
-	if err
+	if err != nil {
+		return nil, err
+	}
+
+	return booksResp.Books, nil
+
+}
+
+func (m *ReadingListModel) Get(id int64) (*Book, error) {
+	url := fmt.Sprintf("%s/%d", m.Endpoint, id)
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status: %s", resp.Status)
+	}
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var bookResp BookResponse
+	err = json.Unmarshal(data, &bookResp)
+	if err != nil {
+		return nil, err
+	}
+
+	return bookResp.Book, nil
 }

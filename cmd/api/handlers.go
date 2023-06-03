@@ -79,7 +79,7 @@ func (app *application) getCreateBooksHandler(w http.ResponseWriter, r *http.Req
 	if r.Method == http.MethodPost {
 		var input struct {
 			Title     string   `json:"title"`
-			Published int      `json:"pubished"`
+			Published int      `json:"published"`
 			Pages     int      `json:"pages"`
 			Genres    []string `json:"genres"`
 			Rating    float32  `json:"rating"`
@@ -193,7 +193,7 @@ func (app *application) updateBook(w http.ResponseWriter, r *http.Request) {
 
 	var input struct {
 		Title     *string  `json:"title"`
-		Published *int     `json:"pubished"`
+		Published *int     `json:"published"`
 		Pages     *int     `json:"pages"`
 		Genres    []string `json:"genres"`
 		Rating    *float32 `json:"rating"`
